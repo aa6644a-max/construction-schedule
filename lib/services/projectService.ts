@@ -4,17 +4,20 @@ import { v4 as uuidv4 } from "uuid";
 export async function listProjects(userId: number) {
   const projects = await prisma.project.findMany({
     where: { userId },
-    include: { workItems: { select: { actualProgress: true, weight: true, parentId: true } } },
+    include: { workItems: { select: { id: true, parentId: true, weight: true, actualProgress: true } } },
     orderBy: { createdAt: "desc" },
   });
 
   return projects.map((p) => {
-    const leaves = p.workItems.filter((w) => w.parentId !== null);
-    const totalWeight = leaves.reduce((s, w) => s + w.weight, 0);
-    const progress =
-      totalWeight > 0
-        ? leaves.reduce((s, w) => s + (w.actualProgress * w.weight) / totalWeight, 0)
-        : 0;
+    const cats = p.workItems.filter((w) => w.parentId === null);
+    const progress = cats.reduce((sum, cat) => {
+      const children = p.workItems.filter((w) => w.parentId === cat.id);
+      if (children.length === 0) return sum;
+      const relTotal = children.reduce((s, w) => s + w.weight, 0);
+      if (relTotal === 0) return sum;
+      const catProgress = children.reduce((s, w) => s + w.actualProgress * (w.weight / relTotal), 0);
+      return sum + cat.weight * catProgress;
+    }, 0);
     return { ...p, workItems: undefined, overallProgress: Math.round(progress) };
   });
 }

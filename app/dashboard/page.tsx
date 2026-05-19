@@ -29,40 +29,41 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white border-b border-gray-200 px-10 py-5 flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-800">공정표 관리 시스템</h1>
-          <p className="text-sm text-gray-500">{session?.user?.name}</p>
+          <h1 className="text-2xl font-bold text-gray-900">공정표 관리 시스템</h1>
+          <p className="text-base text-gray-500 mt-0.5">{session?.user?.name}</p>
         </div>
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="text-sm text-gray-500 hover:text-gray-700"
+          className="text-base text-gray-400 hover:text-gray-700 transition-colors"
         >
           로그아웃
         </button>
       </header>
 
-      <main className="max-w-6xl mx-auto px-8 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-gray-800">
-            현장 목록 ({projects.length})
+      <main className="max-w-7xl mx-auto px-10 py-10">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-xl font-bold text-gray-800">
+            현장 목록
+            <span className="ml-2 text-base font-normal text-gray-400">({projects.length}건)</span>
           </h2>
           <button
             onClick={() => setShowModal(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            className="bg-blue-600 hover:bg-blue-700 text-white text-base font-medium px-6 py-2.5 rounded-xl transition-colors"
           >
             + 새 프로젝트
           </button>
         </div>
 
         {projects.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
-            <p className="text-lg mb-2">등록된 프로젝트가 없습니다.</p>
-            <p className="text-sm">새 프로젝트를 추가해보세요.</p>
+          <div className="text-center py-32 text-gray-400">
+            <p className="text-xl mb-2">등록된 프로젝트가 없습니다.</p>
+            <p className="text-base">새 프로젝트를 추가해보세요.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {projects.map((project) => (
               <ProjectCard
                 key={project.id}
