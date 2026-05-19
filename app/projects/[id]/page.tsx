@@ -6,6 +6,7 @@ import { signOut } from "next-auth/react";
 import GanttChart from "@/components/GanttChart";
 import WorkItemPanel from "@/components/WorkItemPanel";
 import InsuranceCalc from "@/components/InsuranceCalc";
+import HelpGuide from "@/components/HelpGuide";
 import { Project, WorkItem } from "@/types/models";
 
 export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
@@ -13,7 +14,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
   const router = useRouter();
   const [project, setProject] = useState<Project | null>(null);
   const [workItems, setWorkItems] = useState<WorkItem[]>([]);
-  const [tab, setTab] = useState<"gantt" | "items" | "insurance">("gantt");
+  const [tab, setTab] = useState<"gantt" | "items" | "insurance" | "help">("gantt");
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
 
@@ -140,7 +141,7 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
       <main className="px-10 py-8">
         <div className="flex gap-1 mb-7 bg-gray-100 rounded-xl p-1.5 w-fit">
-          {([["gantt", "간트 차트"], ["items", "공종 관리"], ["insurance", "보할 계산"]] as const).map(([key, label]) => (
+          {([["gantt", "간트 차트"], ["items", "공종 관리"], ["insurance", "보할 계산"], ["help", "사용 설명서"]] as const).map(([key, label]) => (
             <button
               key={key}
               onClick={() => setTab(key)}
@@ -174,6 +175,10 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
         {tab === "insurance" && (
           <InsuranceCalc />
+        )}
+
+        {tab === "help" && (
+          <HelpGuide />
         )}
       </main>
     </div>
